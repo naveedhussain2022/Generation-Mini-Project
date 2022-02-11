@@ -1,26 +1,9 @@
 import csv
 import os
-import ast
+import funcs
 
 def PrintOrder():
-    order_list = []
-
-    with open('orders.csv', 'r+', newline= '') as file:
-
-        items_in_list = csv.DictReader(file)
-
-        print("")
-        print('  Current Orders:   \n')    
-
-        i = 0
-        for row in items_in_list:
-            print("Index : "+ str(i),row)
-            i += 1
-            order_list.append(row)
-        print('\n')
-
-    return order_list
-
+    order_list= funcs.readCSVFile('db/orders.csv')
 
 ########################################################################################
 
@@ -55,24 +38,9 @@ def CreateOrder():
 
 ########################################################################################
 
+
 def UpdateStatusOrder():
-    order_list = []
-
-    with open('orders.csv', 'r', newline= '') as file:
-
-        items_in_list = csv.DictReader(file)
-
-        print("")
-        print('  Current List:   \n')    
-
-        i = 0
-        for row in items_in_list:
-            print("Index : "+ str(i),row)
-            i += 1
-            order_list.append(row)
-        print('\n')
-
-    
+    order_list= funcs.readCSVFile('db/orders.csv')
 
     IndexInput = int(input("Which delivery status (index) would you like to update: "))
     ChangeStatusInput = input("What would you like to change the delivery status to?: ")      
@@ -98,24 +66,9 @@ def UpdateStatusOrder():
 ###################################################################################    
     
 def UpdateFullOrder():
-    order_list = []
-
-    with open('orders.csv', 'r+', newline= '') as file:
-
-        items_in_list = csv.DictReader(file)
-
-        print("")
-        print('  Current Orders:   \n')    
-
-        i = 0
-        for row in items_in_list:
-            print("Index : "+ str(i),row)
-            i += 1
-            order_list.append(row)
-        print('\n')
+    order_list= funcs.readCSVFile('db/orders.csv')
 
     IndexInput = int(input("Which order (index) would you like to update: "))
-
     nameUpdate = str(input("New name to update or leave blank: "))
     addressUpdate = str(input("New address to update or leave blank: "))
     phoneUpdate = str(input("New phone number to update or leave blank: "))
@@ -164,7 +117,7 @@ def UpdateFullOrder():
         break
 
     fieldnames = ['name', 'address', 'phone','courier','status']
-    writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
+    writer = csv.DictWriter('db/orders.csv', fieldnames=fieldnames, delimiter=',')
     
 
     if os.stat("orders.csv").st_size == 0:
@@ -178,50 +131,18 @@ def UpdateFullOrder():
 
 
 def DeleteOrder():
-    order_list = []
-
-    #read
-    with open('orders.csv', 'r', newline= '') as file:
-
-        items_in_list = csv.DictReader(file)
-
-        print("")
-        print('  Current Orders:   \n')    
-
-        i = 0
-        for row in items_in_list:
-            print("Index : "+ str(i),row)
-            i += 1
-            order_list.append(row)
-    print('\n')
+    order_list= funcs.readCSVFile('db/orders.csv')
     
-
     #update
     IndexInput = int(input("Which order (index) would you like to delete: "))
-
     order_list.pop(IndexInput)
-
-
     print("\nYour order has been deleted")
-
     print(order_list)
 
     #write
-
     with open('orders.csv', 'w', newline= '') as file:
         fieldnames = ['name', 'address', 'phone','courier','status']
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
-        
-
-
         writer.writeheader()
         writer.writerows(order_list)
     
-
-#PrintOrder()
-#CreateOrder()
-#UpdateStatusOrder()
-#UpdateFullOrder()
-
-
-DeleteOrder()

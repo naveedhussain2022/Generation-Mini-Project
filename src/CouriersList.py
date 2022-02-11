@@ -1,99 +1,90 @@
-from MainApplication import *
+import time
+import funcs
+import csv
+import os
 
 def PrintCompany():
-    print("")
-    file = open('couriers.txt','r',newline="")
-    print(file.read())
-    file.close()
+    order_list= funcs.readCSVFile('db/couriers.csv')
 
 #########################################################################
 
 def CreateCompany():
-    file = open('couriers.txt','a',newline="")
-    UserInput = input("Enter the company you want to add: ")
-    file.write(UserInput +"\n")
-    file.close()
-    PrintCompany()
+    with open('db/couriers.csv', mode='a+', newline='') as file:
+        
+        orderList=[]
+
+        fieldnames = ['Courier Name', 'Phone Number']
+        writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
+ 
+        
+        courierName = str(input('Enter courier name: '))
+        courierNumber = input('Enter courier number: ')
+        
+                  
+        dictToPass ={'Courier Name': courierName,
+                    'Phone Number': courierNumber}      
+
+        #if file is empty, then write header
+        if os.stat("db/couriers.csv").st_size == 0:
+           writer.writeheader()
+           writer.writerow(dictToPass)
+        else:
+            writer.writerow(dictToPass)
 
 #########################################################################
 
 def UpdateCompany():
-    print("")
-    print("### Update Records###")
-    print("Here are the couriers with it's number: ")
-    print("")
+    order_list= funcs.readCSVFile('db/couriers.csv')
 
-    CourierList= []
-
-    with open('couriers.txt','r+') as file:
-        for courier in file:
-            CourierList.append(courier.strip())
+    IndexInput = int(input("Which order (index) would you like to update: "))
     
-        for i in range(len(CourierList)):
-            print (i, end = " ")
-            print (CourierList[i])
+    courierName = str(input('Enter courier name or leave blank: '))
+    courierNumber = str(input('Enter courier number or leave blank: '))
     
-        print("")
 
-        UserInput = int(input("Which courier (number) would you like to update: "))
-        ChangeInput = input("What would you like to change it to?: ")    
-        
-        CourierList[UserInput] = ChangeInput
+    while True:
+        if courierName== "":
+            pass     
+        else:
+            order_list[IndexInput]['Courier Name'] = courierName
+            changes_to_order_made = True
 
-        with open('couriers.txt', 'w') as file:
-            for item in CourierList:
-                file.write("%s\n" % item)
-
-    file.close()
-
-    print("")
-    print("Here is your new courier list")
-    PrintCompany()
+        if courierNumber =="":
+            pass
+        else:
+            order_list[IndexInput]['Phone Number'] = courierNumber
+            changes_to_order_made = True
+        break
+           
+    with open('db/couriers.csv', mode='w', newline='') as file:
+        fieldnames = ['Courier Name', 'Phone Number']
+        writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')        
+        if os.stat("db/products.csv").st_size == 0:
+            writer.writeheader()
+            writer.writerows(order_list)
+        else:
+            writer.writerows(order_list)
 
 #########################################################################
 
 def DeleteCompany():
+    order_list= funcs.readCSVFile('db/couriers.csv')
     
-    CourierList= []
-    with open('couriers.txt','r+') as file:
-        for courier in file:
-            CourierList.append(courier.strip())
+    #update
+    IndexInput = int(input("Which courier (index) would you like to delete: "))
+    order_list.pop(IndexInput)
     
-    for i in range(len(CourierList)):
-            print (i, end = " ")
-            print (CourierList[i])
-    
-    print("")
+    print("\nYour order has been deleted. Here is the updated list: ")
+    print(order_list)
 
-    UserInput = int(input("Which courier (number) would you like to delete: "))
-
-    del CourierList[UserInput]
-
-    with open('couriers.txt', 'w') as file:
-        for item in CourierList:
-            file.write("%s\n" % item)
-
-    file.close()
-    print("")
-    print("Courier has been deleted")
-    PrintCompany()
+    #write
+    with open('db/couriers.csv', 'w', newline= '') as file:
+        fieldnames = ['Courier Name', 'Phone Number']
+        writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
+        if os.stat("db/couriers.csv").st_size == 0:
+            writer.writeheader()
+            writer.writerows(order_list)
+        else:
+            writer.writerows(order_list)
 
 #########################################################################    
-
-    # CourierList.remove(UserInput)
-
-    # print(CourierList)
-    # with open('couriers.txt', 'w') as file:
-    #     for item in CourierList:
-    #         file.write("%s\n" % item)
-
-    # file.close()
-
-    # print("Here is the menu with it's number: ")
-    # for i in range(len(company)):
-    #     print (i, end = " ")
-    #     print (company[i])
-
-    # UserInput = int(input("Which product (number) would you like to delete: "))
-    # del company[UserInput]
-    # print(', '.join(company))
