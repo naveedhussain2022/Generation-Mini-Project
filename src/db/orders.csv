@@ -1,2 +1,3 @@
-name,address,phone,courier,status
-Naveed,Leeds,074433221,2,lll
+name,address,phone,courier,status,items
+nav,leeds,1,20,Preparing,"[6, 5, 4, 3, 2]"
+dean,bfd,1234,2,Preparing,"[1, 1]"

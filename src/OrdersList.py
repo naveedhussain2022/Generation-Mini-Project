@@ -9,11 +9,11 @@ def PrintOrder():
 
 
 def CreateOrder():
-    with open('orders.csv', mode='a+', newline='') as file:
+    with open('db/orders.csv', mode='a+', newline='') as file:
         
         orderList=[]
 
-        fieldnames = ['name', 'address', 'phone','courier','status']
+        fieldnames = ['name', 'address', 'phone','courier','status','items']
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
  
         
@@ -21,19 +21,33 @@ def CreateOrder():
         address = str(input('Enter address: '))
         phone = str(input('Enterphone number: '))
         courier = str(input('Please enter Courier Number: '))
+
+        print("")
+        
+        order_list= funcs.readCSVFile('db/orders.csv')
+        
+        new_items= input("Please enter products seperated by comma: ").split(",")
+        userNewItems = list(map(int, new_items))
+
+        
+        with open('db/orders.csv', mode='a+', newline='') as file:
+            
+            fieldnames = ['name', 'address', 'phone','courier','status','items']
+            writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
                   
-        dictToPass ={'name': name,
-                    'address': address, 
-                    'phone': phone, 
-                    'courier': courier,
-                    'status': 'Preparing'}      
+            dictToPass ={'name': name,
+                        'address': address, 
+                        'phone': phone, 
+                        'courier': courier,
+                        'status': 'Preparing',
+                        'items': userNewItems}      
 
         #if file is empty, then write header
-        if os.stat("orders.csv").st_size == 0:
-           writer.writeheader()
-           writer.writerow(dictToPass)
-        else:
-            writer.writerow(dictToPass)
+            if os.stat("db/orders.csv").st_size == 0:
+                writer.writeheader()
+                writer.writerow(dictToPass)
+            else:
+                writer.writerow(dictToPass)
 
 
 ########################################################################################
@@ -49,15 +63,15 @@ def UpdateStatusOrder():
     
     order_list[IndexInput]["status"] = ChangeStatusInput
 
-    with open('orders.csv', mode='w', newline='') as file:
+    with open('db/orders.csv', mode='w', newline='') as file:
         
 
-        fieldnames = ['name', 'address', 'phone','courier','status']
+        fieldnames = ['name', 'address', 'phone','courier','status','items']
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
      
 
         #if file is empty, then write header
-        if os.stat("orders.csv").st_size == 0:
+        if os.stat("db/orders.csv").st_size == 0:
            writer.writeheader()
            writer.writerows(order_list)
         else:
@@ -67,64 +81,64 @@ def UpdateStatusOrder():
     
 def UpdateFullOrder():
     order_list= funcs.readCSVFile('db/orders.csv')
+           
+    #order_list=[]
 
     IndexInput = int(input("Which order (index) would you like to update: "))
     nameUpdate = str(input("New name to update or leave blank: "))
     addressUpdate = str(input("New address to update or leave blank: "))
     phoneUpdate = str(input("New phone number to update or leave blank: "))
-    courierUpdate = str(input("New courier to update or leave blank: "))
-
-
-    changesBeenMade = False
-
-    while True:
-        confirmChange= input("Do you want to make these changes y/n?")
-        if confirmChange=="y":
-            pass
-        else:
-            #menureturn("Order Menu")
-            break
-
-        if nameUpdate== "":
-            pass     
-        else:
-            order_list[IndexInput]["name"] = nameUpdate
-            changes_to_order_made = True
-
-        if addressUpdate =="":
-            pass
-        else:
-            order_list[IndexInput]["address"] = nameUpdate
-            changes_to_order_made = True
-
-        if phoneUpdate =="":
-            pass
-        else:
-            order_list[IndexInput]["phone"] = nameUpdate
-            changes_to_order_made = True
-
-        if courierUpdate =="":
-            pass
-        else:
-            order_list[IndexInput]["courier"] = nameUpdate
-            changes_to_order_made = True    
-            
-        if changesBeenMade == True:
-            changesBeenMade = False
-            print("\n\nChange(s) to order succesfully made")
-        else:
-            print("No changes made to order\n")
-        break
-
-    fieldnames = ['name', 'address', 'phone','courier','status']
-    writer = csv.DictWriter('db/orders.csv', fieldnames=fieldnames, delimiter=',')
+    courierUpdateString = input("New courier to update or leave blank: ")
     
+    itemsUpdateString = input("Please enter items seperated by comma: ")
+        
 
-    if os.stat("orders.csv").st_size == 0:
-        writer.writeheader()
-        writer.writerows(order_list)
+    if nameUpdate== "":
+        pass     
     else:
-        writer.writerows(order_list)
+        order_list[IndexInput]["name"] = nameUpdate
+        changes_to_order_made = True
+
+    if addressUpdate =="":
+        pass
+    else:
+        order_list[IndexInput]["address"] = addressUpdate
+        changes_to_order_made = True
+
+    if phoneUpdate =="":
+        pass
+    else:
+        order_list[IndexInput]["phone"] = phoneUpdate
+        changes_to_order_made = True
+
+    if courierUpdateString =="":
+        pass
+    else:
+        order_list[IndexInput]["courier"] = int(courierUpdateString)
+        changes_to_order_made = True
+    
+    if not itemsUpdateString =="":
+        itemsUpdate = itemsUpdateString.split(",")
+        userNewItems = list(map(int, itemsUpdate))
+        order_list[IndexInput]["items"] = userNewItems
+        changes_to_order_made = True
+
+    print("\nYour order has been updated")
+                           
+    with open('db/orders.csv', mode='w', newline='') as file:
+        
+
+        fieldnames = ['name', 'address', 'phone','courier','status','items']
+        writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
+        
+
+        #if file is empty, then write header
+        if os.stat("db/orders.csv").st_size == 0:
+            writer.writeheader()
+            writer.writerows(order_list)
+        else:
+            writer.writerows(order_list)
+
 
 
 ################################################################################
@@ -136,13 +150,17 @@ def DeleteOrder():
     #update
     IndexInput = int(input("Which order (index) would you like to delete: "))
     order_list.pop(IndexInput)
+    
     print("\nYour order has been deleted")
     print(order_list)
 
     #write
-    with open('orders.csv', 'w', newline= '') as file:
-        fieldnames = ['name', 'address', 'phone','courier','status']
+    with open('db/orders.csv', 'w', newline= '') as file:
+        fieldnames = ['name', 'address', 'phone','courier','status','items']
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
         writer.writeheader()
         writer.writerows(order_list)
     
+
+#UpdateFullOrder()    
+#CreateOrder()
