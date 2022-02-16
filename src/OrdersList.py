@@ -160,7 +160,3 @@ def DeleteOrder():
         writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=',')
         writer.writeheader()
         writer.writerows(order_list)
-    
-
-#UpdateFullOrder()    
-#CreateOrder()
