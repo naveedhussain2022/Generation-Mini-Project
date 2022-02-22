@@ -42,7 +42,7 @@ def CreateOrder():
                         'status': 'Preparing',
                         'items': userNewItems}      
 
-        #if file is empty, then write header
+            #if file is empty, then write header
             if os.stat("db/orders.csv").st_size == 0:
                 writer.writeheader()
                 writer.writerow(dictToPass)

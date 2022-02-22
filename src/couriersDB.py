@@ -52,6 +52,7 @@ def updateCourier():
     printCourier()
     
     idInput = int(input("Which order (index) would you like to update: "))
+    
     courierNameUpdate = str(input("New courier name to update or leave blank: "))
     courierNumberUpdate = input("New courier number to update or leave blank: ")
     
@@ -65,7 +66,7 @@ def updateCourier():
         cursor.execute(sql, val)
         connection.commit()
     
-    if courierNameUpdate =="":
+    if courierNumberUpdate =="":
         pass
     else:
         sql = 'UPDATE couriers set courier_phone = %s  WHERE id = %s'

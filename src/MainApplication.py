@@ -1,6 +1,6 @@
-from ProductList import PrintProduct, CreateProduct, UpdateProduct, DeleteProduct
-from CouriersList import CreateCompany, DeleteCompany, PrintCompany, UpdateCompany
-from OrdersList import PrintOrder,CreateOrder,UpdateStatusOrder,UpdateFullOrder,DeleteOrder
+import couriersDB
+import productsDB
+import ordersDB
 import time
 
 def CourierMenu():
@@ -24,16 +24,16 @@ def CourierMenu():
         \nEnter Selection: """)
 
             if selection == "1":
-                PrintCompany()
+                couriersDB.printCourier()
                 
             elif selection == "2":
-                CreateCompany()
+                couriersDB.createCourier()
                 
             elif selection == "3":
-                UpdateCompany()
+                couriersDB.updateCourier()
                 
             elif selection == "4":
-                DeleteCompany()
+                couriersDB.deleteCourier()
                 
             elif selection =="0":
                 Main()
@@ -66,17 +66,17 @@ def ProductsMenu():
         \nEnter Selection: """)
 
             if selection == "1":
-                PrintProduct()
+                productsDB.printProduct()
                 time.sleep(2)
                 
             elif selection == "2":
-                CreateProduct()
+                productsDB.createProduct()
                 
             elif selection == "3":
-                UpdateProduct()
+                productsDB.updateProduct()
                 
             elif selection == "4":
-                DeleteProduct()
+                productsDB.deleteProduct()
                 
             elif selection =="0":
                 Main()
@@ -111,19 +111,19 @@ def OrdersMenu():
         \nEnter Selection: """)
 
             if selection == "1":
-                PrintOrder()
+                ordersDB.printOrder()
                 
             elif selection == "2":
-                CreateOrder()
+                ordersDB.createOrder()
                 
             elif selection == "3":
-                UpdateStatusOrder()
+                ordersDB.updateOrderStatus()
                 
             elif selection == "4":
-                UpdateFullOrder()
+                ordersDB.updateOrder()
             
             elif selection =="5":
-                DeleteOrder() 
+                ordersDB.deleteOrder() 
 
             elif selection =="0":
                 Main()
@@ -166,9 +166,7 @@ def Main():
             print(f'You entered {input1}, which is not a number.')
     exit
 
-###############################
-                              
-Main()             
-
-###############################                     
+###############                              
+Main()        #       
+###############                     
 

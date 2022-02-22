@@ -14,7 +14,6 @@ cursor = connection.cursor()
 
 ###########################################################################################
 
-
 def printProduct():
     result = cursor.execute('SELECT id, product_name, product_price FROM products')
     result = cursor.fetchall()
@@ -28,7 +27,6 @@ def printProduct():
     print("")
 
 ###########################################################################################
-
 
 def createProduct():
     
@@ -98,7 +96,3 @@ def deleteProduct():
     printProduct()
 
 ###########################################################################################
-
-#createProduct()
-deleteProduct()
-#printProduct()
