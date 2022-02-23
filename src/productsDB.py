@@ -23,7 +23,7 @@ def printProduct():
     for items in result:
         amount = items[2]
         price = "{:,.2f}".format(amount)
-        print(f'Index: {str(items[0])} | Product: {items[1].upper()} | Price: £{price}')
+        print(f'ID: {str(items[0])} | Product: {items[1].upper()} | Price: £{price}')
     print("")
 
 ###########################################################################################
@@ -52,7 +52,7 @@ def updateProduct():
     
     printProduct()
     
-    idInput = int(input("Which order (index) would you like to update: "))
+    idInput = int(input("Which order (ID) would you like to update: "))
     nameProductUpdate = str(input("New product name to update or leave blank: "))
     priceProductUpdate = input("New price to update or leave blank: ")
     
@@ -74,7 +74,11 @@ def updateProduct():
         
         cursor.execute(sql, val)
         connection.commit()
-
+    
+    print("")
+    print("Your product has been updated. Here is the new product list: \n")
+    time.sleep(2)
+    
     printProduct()
 
 ###########################################################################################
@@ -83,7 +87,7 @@ def updateProduct():
 def deleteProduct():
     printProduct()
     
-    idInput = int(input("Which order (index) would you like to delete: "))
+    idInput = int(input("Which order (ID) would you like to delete: "))
 
     sql = 'DELETE FROM products WHERE id = %s'
     val = (idInput)
@@ -91,6 +95,7 @@ def deleteProduct():
     cursor.execute(sql,val)
     connection.commit()    
 
+    print("")
     print("Product has been deleted. Here is the new product")
     time.sleep(2)
     printProduct()

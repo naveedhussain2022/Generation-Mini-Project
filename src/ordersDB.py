@@ -26,7 +26,7 @@ def printOrder():
     print("")
     print('  Current List:   \n')
     for items in result:
-        print(f'Index: {str(items[0])} | Name: {items[1].upper()} | Address: {str(items[2])} | Phone: {str(items[3])} | Courier: {(items[4])} | Status: {str(items[5])} | Product: {str(items[6])}')
+        print(f'ID: {str(items[0])} | Name: {items[1].upper()} | Address: {str(items[2])} | Phone: {str(items[3])} | Courier: {(items[4])} | Status: {str(items[5])} | Product: {str(items[6])}')
     print("")
 
 ############################################################################################
@@ -43,15 +43,16 @@ def createOrder():
     result = cursor.execute(courierDisplay)
     result = cursor.fetchall()
     for order in result:
-        print(f'Index: {str(order[0])} | Courier: {order[1]}')
+        print(f'ID: {str(order[0])} | Courier: {order[1]}')
     print("")
-    orderCourier = int(input('Enter (INDEX) for courier: '))
+    orderCourier = int(input('Enter (ID) for courier: '))
     print("")
 
     #Status
     orderList = ["Preparing", "Out for delivery", "Delivered"]
     for i, item in enumerate(orderList):
         print(f'Index:{i} | {item}')
+    print("")
     orderStatus = int(input('Enter order status: '))
     newOrderStatus = orderList[orderStatus]
     
@@ -61,6 +62,7 @@ def createOrder():
     connection.commit()
 
     getOrderId = cursor.lastrowid
+    print("")
 
     #Products
     displayProducts = cursor.execute("select id, product_name from products")
@@ -91,7 +93,7 @@ def createOrder():
 def updateOrderStatus():
     printOrder()
     
-    idInput = int(input("Which order (index) would you like to update: "))
+    idInput = int(input("Which order (ID) would you like to update: "))
 
 
     orderList = ["Preparing", "Out for delivery", "Delivered"]
@@ -117,10 +119,11 @@ def updateOrder():
     
     printOrder()
     
-    idInput = int(input("Which order (index) would you like to update: "))
+    idInput = int(input("Which order (ID) would you like to update: "))
     nameOrderUpdate = str(input("New order name to update or leave blank: "))
     addressOrderUpdate = input("New address to update or leave blank: ")
     phoneOrderUpdate = input("New phone to update or leave blank: ")
+    print("")
     
     #Courier Update
     courierDisplay = "SELECT id, courier_name from couriers"
@@ -129,8 +132,9 @@ def updateOrder():
     for order in result:
         print(f'Index: {str(order[0])} | Courier: {order[1]}')
     print("")
-    orderCourier = input('Enter (INDEX) for courier: ')
-    
+    orderCourier = input('Enter (ID) for courier: ')
+    print("")
+
     #Update product
     displayProducts = cursor.execute("select id, product_name from products")
     displayProducts = cursor.fetchall()
@@ -189,6 +193,10 @@ def updateOrder():
         cursor.executemany(sql,products)
         connection.commit()
 
+    print("")
+    print("Your order has been added. Here is the new orders list: \n")
+    time.sleep(2)
+    printOrder()
 
 # ###########################################################################################
 
@@ -196,7 +204,7 @@ def updateOrder():
 def deleteOrder():
     printOrder()
     
-    idInput = int(input("Which order (index) would you like to delete: "))
+    idInput = int(input("Which order (ID) would you like to delete: "))
 
     sql = 'DELETE FROM orders WHERE id = %s'
     val = (idInput)
